@@ -34,11 +34,7 @@
       --muted:#5f6761;
     }
     * { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-    body {
-      --sidebar-width: 16rem;
-      --sidebar-collapsed-width: 5.5rem;
-      background:var(--surface); color:var(--text);
-    }
+    body { background:var(--surface); color:var(--text); }
     .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:0 1px 2px rgba(16,48,32,.04),0 6px 18px rgba(16,48,32,.04); }
     .nav-link { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; color:#bfd3c2; font-size:14px; font-weight:500; transition:.2s ease; }
     .nav-link:hover { background:#24372b; color:#fff; }
@@ -49,21 +45,7 @@
     .scroll-hidden::-webkit-scrollbar { display:none; }
     html { scroll-behavior:smooth; }
     section[id] { scroll-margin-top: 1.25rem; }
-
-    .sidebar { width: var(--sidebar-width); transition: width .25s ease; }
-    .sidebar-collapsed .sidebar { width: var(--sidebar-collapsed-width); }
-    .sidebar-collapsed .sidebar .sidebar-copy,
-    .sidebar-collapsed .sidebar .sidebar-label,
-    .sidebar-collapsed .sidebar .sidebar-card-text,
-    .sidebar-collapsed .sidebar .nav-link .label,
-    .sidebar-collapsed .sidebar .sidebar-cta-text { display:none; }
-    .sidebar-collapsed .sidebar .sidebar-header { justify-content:center; }
-    .sidebar-collapsed .sidebar .nav-link { justify-content:center; padding-left:0; padding-right:0; }
-    .sidebar-collapsed .sidebar .nav-link svg { margin-right:0; }
-    .sidebar-collapsed .sidebar .sidebar-card { padding: 0.8rem 0.4rem; }
-    .sidebar-collapsed .sidebar .sidebar-card a { font-size: 0; }
-    .sidebar-collapsed #mainContent { margin-left: var(--sidebar-collapsed-width); }
-    #mainContent { margin-left: var(--sidebar-width); transition: margin-left .25s ease; }
+    #mainContent { margin-left: 16rem; }
 
     .brand-panel {
       position:relative;
@@ -144,15 +126,15 @@
 </head>
 <body class="text-[#0c2417]">
   
-<div id="pageShell" class="flex min-h-screen">
+<div class="flex min-h-screen">
   
   <!-- ============ SIDEBAR ============ -->
-  <aside id="sidebar" class="sidebar shrink-0 bg-[#1e1f21] text-white flex flex-col fixed h-screen z-20 border-r border-white/5 shadow-[14px_0_35px_rgba(15,15,15,0.12)]">
-    <div class="sidebar-header px-5 py-5 flex items-center gap-3 border-b border-white/10">
-      <button id="sidebarToggle" type="button" aria-label="Toggle sidebar" class="mr-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#d8f9a8] transition hover:bg-white/10">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="sidebar-copy">
+  <aside class="w-64 shrink-0 bg-[#1e1f21] text-white flex flex-col fixed h-screen z-20 border-r border-white/5 shadow-[14px_0_35px_rgba(15,15,15,0.12)]">
+    <div class="px-5 py-5 flex items-center gap-3 border-b border-white/10">
+      <div class="w-10 h-10 rounded-xl bg-[#9de334] flex items-center justify-center shadow-[0_0_0_2px_rgba(157,227,52,0.22)]">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18.5C8.7 8.3 15.5 4.8 21 4.5V20c-4.6-.7-8.9-2.1-12.8-5.1L3 18.5Z" fill="#111"/><path d="M4.7 15.9c4.8-3.9 9.8-5 15.3-3.7" stroke="#9de334" stroke-width="1.1" stroke-linecap="round"/></svg>
+      </div>
+      <div>
         <p class="font-black text-[17px] leading-none tracking-[-.06em]">Jocate</p>
         <p class="text-[10px] uppercase tracking-[0.2em] text-[#d8f9a8] mt-1.5">Enterprises</p>
       </div>
@@ -161,52 +143,52 @@
     <div class="px-3 pt-3">
       <a href="../index.html" class="flex items-center justify-center gap-2 rounded-xl border border-[#3b4a40] bg-[#2a352f] px-3 py-2 text-[12px] font-semibold text-[#ebf6df] transition hover:border-[#9de334] hover:text-white">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-        <span class="sidebar-cta-text">Main site</span>
+        Main site
       </a>
     </div>
   
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto scroll-hidden">
-      <p class="sidebar-label px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1">Main</p>
+      <p class="px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1">Main</p>
       <a href="#overview" class="nav-link active">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-        <span class="label">Overview</span>
+        Overview
       </a>
       <a href="#feedstocks" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20"/><path d="M12 9c-3-2-6-1-7 1 3 1 6 0 7-1z"/><path d="M12 13c3-2 6-1 7 1-3 1-6 0-7-1z"/></svg>
-        <span class="label">Feedstocks</span>
+        Feedstocks
       </a>
       <a href="#regions" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5.5-7-11a7 7 0 1114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <span class="label">Supply Regions</span>
+        Supply Regions
       </a>
       <a href="#cases" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M4 9h16M9 5v14"/></svg>
-        <span class="label">Case Studies</span>
+        Case Studies
       </a>
       <a href="#market" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>
-        <span class="label">Market Insights</span>
+        Market Insights
       </a>
-      <p class="sidebar-label px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1 mt-4">Network</p>
+      <p class="px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1 mt-4">Network</p>
       <a href="#partners" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 20c0-2 2-3.5 4-3.5"/></svg>
-        <span class="label">Partners</span>
+        Partners
       </a>
       <a href="#contact" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        <span class="label">Contact</span>
+        Contact
       </a>
     </nav>
   
-    <div class="sidebar-card m-3 p-4 rounded-2xl bg-[#2d352f] border border-white/5">
-      <p class="sidebar-card-text text-[13px] font-semibold">Become a partner</p>
-      <p class="sidebar-card-text text-[11px] text-[#d8f9a8]/70 mt-1 leading-snug">Source traceable agro-waste feedstock at scale.</p>
-      <a href="#contact" class="mt-3 block text-center bg-[#9de334] hover:bg-[#84d11d] text-[#111] text-[12px] font-semibold rounded-lg py-2 transition"><span class="sidebar-cta-text">Request supply</span></a>
+    <div class="m-3 p-4 rounded-2xl bg-[#2d352f] border border-white/5">
+      <p class="text-[13px] font-semibold">Become a partner</p>
+      <p class="text-[11px] text-[#d8f9a8]/70 mt-1 leading-snug">Source traceable agro-waste feedstock at scale.</p>
+      <a href="#contact" class="mt-3 block text-center bg-[#9de334] hover:bg-[#84d11d] text-[#111] text-[12px] font-semibold rounded-lg py-2 transition">Request supply</a>
     </div>
   </aside>
   
   <!-- ============ MAIN ============ -->
-  <div id="mainContent" class="flex-1">
+  <div class="flex-1 ml-64">
  
     <!-- Topbar -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-[#eaeee8] px-8 h-16 flex items-center justify-between">
@@ -697,21 +679,6 @@
 
 const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
 const gridc = '#eef2ec';
-
-const setSidebarCollapsed = (collapsed) => {
-  document.body.classList.toggle('sidebar-collapsed', collapsed);
-  const toggle = document.getElementById('sidebarToggle');
-  if (!toggle) return;
-  toggle.setAttribute('aria-expanded', String(!collapsed));
-  toggle.innerHTML = collapsed
-    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>'
-    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
-};
-
-document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-  const collapsed = document.body.classList.contains('sidebar-collapsed');
-  setSidebarCollapsed(!collapsed);
-});
 
 document.querySelectorAll('.nav-link').forEach((link) => {
   link.addEventListener('click', () => {
