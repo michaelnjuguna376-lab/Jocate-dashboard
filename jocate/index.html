@@ -136,7 +136,14 @@
         <p class="text-[10px] uppercase tracking-[0.2em] text-[#d8f9a8] mt-1.5">Enterprises</p>
       </div>
     </div>
- 
+
+    <div class="px-3 pt-3">
+      <a href="../index.html" class="flex items-center justify-center gap-2 rounded-xl border border-[#3b4a40] bg-[#2a352f] px-3 py-2 text-[12px] font-semibold text-[#ebf6df] transition hover:border-[#9de334] hover:text-white">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Main site
+      </a>
+    </div>
+  
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto scroll-hidden">
       <p class="px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1">Main</p>
       <a href="#overview" class="nav-link active">
@@ -187,6 +194,10 @@
         <p class="text-[12px] text-gray-500">Operational dashboard · FY 2026</p>
       </div>
       <div class="flex items-center gap-3">
+        <a href="../index.html" class="hidden md:inline-flex items-center gap-2 rounded-full border border-[#dfe8dd] bg-white px-3.5 py-2 text-[12px] font-semibold text-[#183525] transition hover:border-[#bfe77f] hover:bg-[#f5fbef]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          Main site
+        </a>
         <div class="hidden md:flex items-center gap-2 bg-[#f1f4ef] rounded-full px-4 py-2 w-72">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7c70" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
           <input placeholder="Search feedstock, partners, regions" class="bg-transparent text-[13px] outline-none w-full placeholder:text-gray-400">
@@ -631,12 +642,12 @@
             <p class="text-leaf-100/80 text-[14px] mt-2 max-w-lg">Tell us your feedstock, volume and delivery region. Our team will respond with grades, lead times and pricing within 48 hours.</p>
           </div>
           <div class="card p-5 w-full lg:w-96 bg-white">
-            <div class="grid grid-cols-2 gap-3">
-              <input placeholder="Company" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Feedstock" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Volume (t/mo)" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Email" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <button class="col-span-2 bg-leaf-600 hover:bg-leaf-700 text-white font-semibold text-[14px] rounded-lg py-2.5 transition">Request a quote</button>
+            <div id="quoteForm" class="grid grid-cols-2 gap-3">
+              <input id="quoteCompany" type="text" placeholder="Company" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
+              <input id="quoteFeedstock" type="text" placeholder="Feedstock" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
+              <input id="quoteVolume" type="text" placeholder="Volume (t/mo)" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
+              <input id="quoteEmail" type="email" placeholder="Email" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
+              <button id="quoteButton" type="button" class="col-span-2 bg-leaf-600 hover:bg-leaf-700 text-white font-semibold text-[14px] rounded-lg py-2.5 transition">Request a quote</button>
             </div>
           </div>
         </div>
@@ -654,6 +665,26 @@
 <script>
   const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
   const gridc = '#eef2ec';
+
+  const buildMailto = () => {
+    const company = document.getElementById('quoteCompany')?.value?.trim() || 'Not provided';
+    const feedstock = document.getElementById('quoteFeedstock')?.value?.trim() || 'Not provided';
+    const volume = document.getElementById('quoteVolume')?.value?.trim() || 'Not provided';
+    const email = document.getElementById('quoteEmail')?.value?.trim() || 'Not provided';
+
+    const subject = encodeURIComponent(`Quote Request - ${company}`);
+    const body = encodeURIComponent(
+      `Company: ${company}\n` +
+      `Feedstock: ${feedstock}\n` +
+      `Volume: ${volume}\n` +
+      `Email: ${email}\n\n` +
+      `Please share pricing, lead times, and delivery options for this requirement.`
+    );
+
+    window.location.href = `mailto:jocateent@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  document.getElementById('quoteButton')?.addEventListener('click', buildMailto);
 
   new Chart(document.getElementById('sectorChart'), {
     type: 'bar',

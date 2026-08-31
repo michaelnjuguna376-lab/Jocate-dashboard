@@ -327,13 +327,13 @@
 
               <div class="rounded-[24px] bg-white p-5 text-slate-700 shadow-[0_20px_44px_rgba(7,16,12,0.18)]">
                 <div class="grid gap-3">
-                  <input placeholder="Company" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none ring-0 placeholder:text-slate-400" />
+                  <input id="landingCompany" placeholder="Company" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none ring-0 placeholder:text-slate-400" />
                   <div class="grid grid-cols-2 gap-3">
-                    <input placeholder="Feedstock" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
-                    <input placeholder="Volume (t/mo)" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                    <input id="landingFeedstock" placeholder="Feedstock" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                    <input id="landingVolume" placeholder="Volume (t/mo)" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
                   </div>
-                  <input placeholder="Email" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
-                  <button class="mt-1 rounded-xl bg-[#9fe53a] px-4 py-3 text-sm font-bold text-[#101010] transition hover:bg-[#8bd62a]">Request a quote</button>
+                  <input id="landingEmail" placeholder="Email" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                  <button id="landingQuoteButton" type="button" class="mt-1 rounded-xl bg-[#9fe53a] px-4 py-3 text-sm font-bold text-[#101010] transition hover:bg-[#8bd62a]">Request a quote</button>
                 </div>
               </div>
             </div>
@@ -348,5 +348,28 @@
         </div>
       </footer>
     </div>
+    <script>
+      const sendQuoteEmail = (companyId, feedstockId, volumeId, emailId) => {
+        const company = document.getElementById(companyId)?.value?.trim() || 'Not provided';
+        const feedstock = document.getElementById(feedstockId)?.value?.trim() || 'Not provided';
+        const volume = document.getElementById(volumeId)?.value?.trim() || 'Not provided';
+        const email = document.getElementById(emailId)?.value?.trim() || 'Not provided';
+
+        const subject = encodeURIComponent(`Quote Request - ${company}`);
+        const body = encodeURIComponent(
+          `Company: ${company}\n` +
+          `Feedstock: ${feedstock}\n` +
+          `Volume: ${volume}\n` +
+          `Email: ${email}\n\n` +
+          `Please share pricing, lead times, and delivery options for this requirement.`
+        );
+
+        window.location.href = `mailto:jocateent@gmail.com?subject=${subject}&body=${body}`;
+      };
+
+      document.getElementById('landingQuoteButton')?.addEventListener('click', () => {
+        sendQuoteEmail('landingCompany', 'landingFeedstock', 'landingVolume', 'landingEmail');
+      });
+    </script>
   </body>
 </html>
