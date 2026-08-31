@@ -1,604 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jocate — Agro-Waste Supply Dashboard</title>
-  <meta name="description" content="Jocate turns agricultural waste into value — supplying clean, traceable agro-waste feedstock to partner companies across East Africa.">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: { extend: {
-        colors: {
-          forest: { 900:'#0c2417', 800:'#103020', 700:'#16412c', 600:'#1c5238' },
-          leaf: { 50:'#f0fdf4', 100:'#dcfce7', 200:'#bbf7d0', 400:'#4ade80', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' },
-        },
-        fontFamily: { sans: ['Inter','sans-serif'] }
-      }}
-    }
-  </script>
-  <style>
-    * { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-    body { background:#f4f7f3; }
-    .card { background:#fff; border:1px solid #eaeee8; border-radius:18px; box-shadow:0 1px 2px rgba(16,48,32,.04),0 6px 18px rgba(16,48,32,.04); }
-    .nav-link { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; color:#a7c4b4; font-size:14px; font-weight:500; transition:.15s; }
-    .nav-link:hover { background:#16412c; color:#fff; }
-    .nav-link.active { background:#16a34a; color:#fff; }
-    ::-webkit-scrollbar { width:9px; height:9px; }
-    ::-webkit-scrollbar-thumb { background:#cfe0d4; border-radius:9999px; }
-    .scroll-hidden::-webkit-scrollbar { display:none; }
-    html { scroll-behavior:smooth; }
-  </style>
-</head>
-<body class="text-[#0c2417]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jocate Enterprises | Sustainable Agro-Waste Supply</title>
+    <meta
+      name="description"
+      content="Jocate Enterprises supplies traceable agro-waste feedstock to energy, construction and agricultural businesses across East Africa."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              charcoal: '#1d1f21',
+              olive: '#aeea39',
+              lime: '#98dd2e',
+              moss: '#173b2f',
+              mist: '#f3f6f2'
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif']
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      :root {
+        --charcoal: #1d1f21;
+        --charcoal-soft: #2c2f31;
+        --olive: #aeea39;
+        --lime: #98dd2e;
+        --moss: #173b2f;
+        --mist: #f3f6f2;
+        --panel: #ffffff;
+        --line: #e7ece4;
+        --text: #15181b;
+        --muted: #5f6965;
+      }
 
-<div class="flex min-h-screen">
+      * { font-family: 'Inter', sans-serif; }
+      html { scroll-behavior: smooth; }
+      body {
+        background: linear-gradient(180deg, #fbfcfa 0%, #f4f7f2 100%);
+        color: var(--text);
+      }
 
-  <aside class="w-64 shrink-0 bg-forest-900 text-white flex flex-col fixed h-screen z-20">
-    <div class="px-5 py-5 flex items-center gap-3 border-b border-white/10">
-      <div class="w-10 h-10 rounded-xl bg-leaf-600 flex items-center justify-center">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M5 21c0-7 5-13 14-14 0 9-6 14-14 14z"/><path d="M5 21c2-5 5-8 9-10" stroke="#0c2417" stroke-width="1.4" fill="none"/></svg>
-      </div>
-      <div>
-        <p class="font-extrabold text-[17px] leading-none">Jocate</p>
-        <p class="text-[11px] text-leaf-200/70 mt-1">Agro-Waste Supply</p>
-      </div>
-    </div>
+      .brand-triangle {
+        position: relative;
+        overflow: hidden;
+        background: #f2f2f2;
+        border: 1px solid rgba(15, 15, 15, 0.08);
+      }
+      .brand-triangle::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 62%;
+        background: var(--charcoal);
+        clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%);
+      }
+      .brand-triangle::after {
+        content: "";
+        position: absolute;
+        inset: 0 0 0 auto;
+        width: 52%;
+        background: linear-gradient(90deg, rgba(150, 225, 45, 0.98), rgba(172, 234, 57, 0.94));
+        clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
+      }
+      .brand-inner {
+        position: relative;
+        z-index: 1;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        padding: 2rem 2.5rem;
+      }
+      .eyebrow {
+        display: inline-block;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #e5f9bc;
+      }
+      .brand-wordmark {
+        margin-top: 1rem;
+        font-size: clamp(2.6rem, 4vw, 5rem);
+        line-height: 0.82;
+        letter-spacing: -0.08em;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #0d0d0d;
+      }
+      .brand-mark {
+        width: min(40vw, 470px);
+        min-width: 220px;
+        flex-shrink: 0;
+      }
+      .brand-mark svg { width: 100%; height: auto; display: block; }
 
-    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto scroll-hidden">
-      <p class="px-3 text-[10px] uppercase tracking-wider text-leaf-200/50 font-semibold mb-1">Main</p>
-      <a href="#overview" class="nav-link active">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-        Overview
-      </a>
-      <a href="#feedstocks" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20"/><path d="M12 9c-3-2-6-1-7 1 3 1 6 0 7-1z"/><path d="M12 13c3-2 6-1 7 1-3 1-6 0-7-1z"/></svg>
-        Feedstocks
-      </a>
-      <a href="#regions" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5.5-7-11a7 7 0 1114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        Supply Regions
-      </a>
-      <a href="#cases" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M4 9h16M9 5v14"/></svg>
-        Case Studies
-      </a>
-      <a href="#market" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>
-        Market Insights
-      </a>
-      <p class="px-3 text-[10px] uppercase tracking-wider text-leaf-200/50 font-semibold mb-1 mt-4">Network</p>
-      <a href="#partners" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 20c0-2 2-3.5 4-3.5"/></svg>
-        Partners
-      </a>
-      <a href="#contact" class="nav-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        Contact
-      </a>
-    </nav>
+      .nav-link {
+        transition: all 0.2s ease;
+      }
+      .nav-link:hover {
+        transform: translateY(-1px);
+      }
 
-    <div class="m-3 p-4 rounded-2xl bg-forest-700">
-      <p class="text-[13px] font-semibold">Become a partner</p>
-      <p class="text-[11px] text-leaf-200/70 mt-1 leading-snug">Source traceable agro-waste feedstock at scale.</p>
-      <a href="#contact" class="mt-3 block text-center bg-leaf-500 hover:bg-leaf-600 text-white text-[12px] font-semibold rounded-lg py-2 transition">Request supply</a>
-    </div>
-  </aside>
-
-  <div class="flex-1 ml-64">
-    <header class="sticky top-0 z-10 bg-white/85 backdrop-blur border-b border-[#eaeee8] px-8 h-16 flex items-center justify-between">
-      <div>
-        <h1 class="text-[18px] font-bold">Supply Overview</h1>
-        <p class="text-[12px] text-gray-500">Operational dashboard · FY 2026</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-2 bg-[#f1f4ef] rounded-full px-4 py-2 w-72">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7c70" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-          <input placeholder="Search feedstock, partners, regions" class="bg-transparent text-[13px] outline-none w-full placeholder:text-gray-400">
-        </div>
-        <button class="relative w-10 h-10 rounded-full bg-[#f1f4ef] flex items-center justify-center">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c2417" stroke-width="1.8"><path d="M6 9a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg>
-          <span class="absolute top-1.5 right-2 w-2.5 h-2.5 bg-leaf-500 rounded-full border-2 border-white"></span>
-        </button>
-        <div class="flex items-center gap-2 pl-1">
-          <div class="w-9 h-9 rounded-full bg-leaf-600 text-white font-semibold flex items-center justify-center text-sm">JC</div>
-          <div class="hidden lg:block leading-tight">
-            <p class="text-[13px] font-semibold">Jocate Ops</p>
-            <p class="text-[11px] text-gray-500">Admin</p>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main class="p-8 space-y-10">
-      <section id="overview" class="rounded-3xl overflow-hidden relative" style="background:linear-gradient(120deg,#0c2417 0%,#16412c 55%,#1c5238 100%)">
-        <div class="absolute inset-0 opacity-20" style="background:radial-gradient(circle at 85% 20%, #22c55e, transparent 45%)"></div>
-        <div class="relative px-9 py-9 flex flex-col lg:flex-row lg:items-center gap-8">
-          <div class="flex-1">
-            <span class="inline-flex items-center gap-2 bg-white/10 text-leaf-100 text-[12px] font-medium px-3 py-1 rounded-full">
-              <span class="w-2 h-2 bg-leaf-400 rounded-full"></span> Turning agricultural waste into value for East Africa
-            </span>
-            <h2 class="text-white font-extrabold text-[30px] leading-tight mt-4 max-w-xl">Clean, traceable agro-waste feedstock for partner companies</h2>
-            <p class="text-leaf-100/80 text-[14px] mt-3 max-w-lg leading-relaxed">Jocate aggregates post-harvest residues from smallholder farmers and agro-processors — bagasse, rice husk, maize cobs and more — and supplies them to energy, construction and feed manufacturers across East Africa. All feedstock is quality-graded to ISO standards and traceable from collection hub to end-use facility.</p>
-            <div class="flex flex-wrap gap-3 mt-6">
-              <a href="#contact" class="bg-leaf-500 hover:bg-leaf-600 text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl transition">Request a supply quote</a>
-              <a href="#cases" class="bg-white/10 hover:bg-white/20 text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl transition">View case studies</a>
+      @media (max-width: 768px) {
+        .brand-triangle::before {
+          width: 100%;
+          clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+        }
+        .brand-triangle::after {
+          width: 100%;
+          top: 58%;
+          height: 42%;
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+        }
+        .brand-inner {
+          flex-direction: column;
+          align-items: flex-start;
+          padding-top: 2.2rem;
+        }
+        .brand-mark {
+          width: 72%;
+          margin-left: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen text-[#101010]">
+      <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+          <div class="flex items-center gap-3">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9fe53a] shadow-[0_0_0_2px_rgba(159,229,58,0.22)]">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <path d="M3 18.5C8.7 8.3 15.5 4.8 21 4.5V20c-4.6-.7-8.9-2.1-12.8-5.1L3 18.5Z" fill="#111"/>
+                <path d="M4.7 15.9c4.8-3.9 9.8-5 15.3-3.7" stroke="#9fe53a" stroke-width="1.1" stroke-linecap="round"/>
+              </svg>
             </div>
-          </div>
-          <div class="lg:w-72 grid grid-cols-2 gap-3">
-            <div class="bg-white/10 rounded-2xl p-4">
-              <p class="text-leaf-100/70 text-[11px]">Diversion rate</p>
-              <p class="text-white font-extrabold text-2xl mt-1">94%</p>
-              <p class="text-leaf-200 text-[11px]">waste kept from open burning</p>
-            </div>
-            <div class="bg-white/10 rounded-2xl p-4">
-              <p class="text-leaf-100/70 text-[11px]">On-time supply</p>
-              <p class="text-white font-extrabold text-2xl mt-1">98.2%</p>
-              <p class="text-leaf-200 text-[11px]">delivery reliability</p>
-            </div>
-            <div class="bg-white/10 rounded-2xl p-4 col-span-2 flex items-center justify-between">
-              <div>
-                <p class="text-leaf-100/70 text-[11px]">Avg. cost vs. fossil fuel</p>
-                <p class="text-white font-extrabold text-2xl mt-1">−42%</p>
-              </div>
-              <svg width="64" height="36" viewBox="0 0 64 36" fill="none"><polyline points="2,30 14,24 26,26 38,14 50,16 62,4" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div class="card p-4">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-9 h-9 rounded-lg bg-leaf-100 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="1.8"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
-            </span>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-0.5 rounded-lg">▲ 12.4%</span>
-          </div>
-          <p class="text-[22px] font-extrabold">18,400 t</p>
-          <p class="text-[12px] text-gray-500">Agro-waste supplied (YTD)</p>
-          <p class="text-[10px] text-gray-400 mt-1">~2,470 t CO₂e diverted</p>
-        </div>
-        <div class="card p-4">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="1.8"><path d="M3 21V8l6-4 6 4v13"/><path d="M15 21V11l6 4v6M7 12h.01M7 16h.01"/></svg>
-            </span>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-0.5 rounded-lg">▲ 8</span>
-          </div>
-          <p class="text-[22px] font-extrabold">64</p>
-          <p class="text-[12px] text-gray-500">Partner companies</p>
-          <p class="text-[10px] text-gray-400 mt-1">Energy, construction, feed</p>
-        </div>
-        <div class="card p-4">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-9 h-9 rounded-lg bg-sky-100 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 20c0-2 1.5-3.5 3.5-3.5"/></svg>
-            </span>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-0.5 rounded-lg">▲ 180</span>
-          </div>
-          <p class="text-[22px] font-extrabold">2,300</p>
-          <p class="text-[12px] text-gray-500">Farmers in network</p>
-          <p class="text-[10px] text-gray-400 mt-1">KSh 8,400 income uplift</p>
-        </div>
-        <div class="card p-4">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="1.8"><path d="M5 21c0-7 5-13 14-14 0 9-6 14-14 14z"/><path d="M5 21c2-5 5-8 9-10"/></svg>
-            </span>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-0.5 rounded-lg">▲ 15%</span>
-          </div>
-          <p class="text-[22px] font-extrabold">27,600 t</p>
-          <p class="text-[12px] text-gray-500">CO₂e avoided</p>
-          <p class="text-[10px] text-gray-400 mt-1">7,220 households' annual</p>
-        </div>
-      </section>
-
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <div class="card p-4 lg:col-span-2">
-          <div class="flex items-center justify-between mb-3">
             <div>
-              <h3 class="font-bold text-[15px]">Monthly supply volume</h3>
-              <p class="text-[11px] text-gray-500">Tonnes to partners</p>
+              <div class="text-xl font-black tracking-[-0.08em]">Jocate</div>
+              <div class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#2c7a2b]">Enterprises</div>
             </div>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-1 rounded-lg">2026 ▾</span>
           </div>
-          <canvas id="volChart" height="70"></canvas>
-        </div>
-        <div class="card p-4">
-          <h3 class="font-bold text-[15px] mb-1">Feedstock mix</h3>
-          <p class="text-[11px] text-gray-500 mb-2">Volume share %</p>
-          <canvas id="mixChart" height="110"></canvas>
-        </div>
-      </section>
 
-      <section id="feedstocks" class="scroll-mt-20">
-        <div class="mb-3">
-          <h2 class="text-[20px] font-bold">Feedstocks we supply</h2>
-          <p class="text-[12px] text-gray-500">Quality-graded agro-residues. ISO 17225 certified with chain-of-custody documentation.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🌾</span>
-              <h3 class="font-semibold text-[14px]">Sugarcane bagasse</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">High-calorific fibre for briquettes &amp; cogeneration.</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Briquettes</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Cogenerator</span>
-            </div>
-          </div>
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🍚</span>
-              <h3 class="font-semibold text-[14px]">Rice husk</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">Silica-rich for fuel &amp; rice-husk ash (concrete).</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Power</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">RHA</span>
-            </div>
-          </div>
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🌽</span>
-              <h3 class="font-semibold text-[14px]">Maize cobs &amp; stover</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">Abundant base for biochar &amp; activated carbon.</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Biochar</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Activated carbon</span>
-            </div>
-          </div>
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">☕</span>
-              <h3 class="font-semibold text-[14px]">Coffee husk &amp; pulp</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">Processing residue into organic fertiliser &amp; pellets.</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Fertiliser</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Pellets</span>
-            </div>
-          </div>
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🥥</span>
-              <h3 class="font-semibold text-[14px]">Coconut husk &amp; shell</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">Coastal feedstock for coir &amp; premium charcoal.</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Coir</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Charcoal</span>
-            </div>
-          </div>
-          <div class="card p-3">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🪚</span>
-              <h3 class="font-semibold text-[14px]">Sawdust &amp; Macadamia</h3>
-            </div>
-            <p class="text-[12px] text-gray-600 mt-2 leading-tight">Wood-processing waste for high-calorific briquettes.</p>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Briquettes</span>
-              <span class="text-[10px] bg-leaf-50 text-leaf-700 px-2 py-0.5 rounded-md">Binder</span>
-            </div>
-          </div>
-        </div>
-      </section>
+          <nav class="hidden items-center gap-8 text-sm font-medium text-slate-700 md:flex">
+            <a href="#solutions" class="nav-link hover:text-[#173b2f]">Solutions</a>
+            <a href="#impact" class="nav-link hover:text-[#173b2f]">Impact</a>
+            <a href="#feedstocks" class="nav-link hover:text-[#173b2f]">Feedstocks</a>
+            <a href="#contact" class="nav-link hover:text-[#173b2f]">Contact</a>
+          </nav>
 
-      <section id="regions" class="scroll-mt-20">
-        <div class="mb-4">
-          <h2 class="text-[20px] font-bold">Supply regions</h2>
-          <p class="text-[13px] text-gray-500">Collection hubs across Kenya's agro-processing corridors.</p>
-        </div>
-        <div class="card p-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div class="lg:col-span-2 space-y-3">
-            <div class="flex items-center justify-between p-3 rounded-xl bg-leaf-50">
-              <div><p class="font-semibold text-[14px]">Western (Kakamega · Bungoma)</p><p class="text-[12px] text-gray-500">Sugarcane bagasse</p></div>
-              <span class="font-bold text-leaf-700">34%</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-[#f7faf5]">
-              <div><p class="font-semibold text-[14px]">Rift Valley (Uasin Gishu · Nakuru)</p><p class="text-[12px] text-gray-500">Maize cobs &amp; stover</p></div>
-              <span class="font-bold text-leaf-700">23%</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-[#f7faf5]">
-              <div><p class="font-semibold text-[14px]">Nyanza (Kisumu · Ahero)</p><p class="text-[12px] text-gray-500">Rice husk</p></div>
-              <span class="font-bold text-leaf-700">19%</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-[#f7faf5]">
-              <div><p class="font-semibold text-[14px]">Central (Murang'a · Nyeri)</p><p class="text-[12px] text-gray-500">Coffee &amp; macadamia husk</p></div>
-              <span class="font-bold text-leaf-700">14%</span>
-            </div>
-            <div class="flex items-center justify-between p-3 rounded-xl bg-[#f7faf5]">
-              <div><p class="font-semibold text-[14px]">Coast (Kilifi · Kwale)</p><p class="text-[12px] text-gray-500">Coconut husk &amp; shell</p></div>
-              <span class="font-bold text-leaf-700">10%</span>
-            </div>
-          </div>
-          <div class="lg:col-span-3 rounded-2xl bg-[#eef4ea] relative overflow-hidden min-h-[280px] flex items-center justify-center">
-            <svg viewBox="0 0 300 260" class="w-full h-full max-h-[300px]">
-              <path d="M70 40 L160 30 L210 60 L235 120 L210 180 L150 220 L95 205 L60 150 L55 90 Z" fill="#d6e7cf" stroke="#9ec4a3" stroke-width="2"/>
-              <g font-family="Inter" font-size="9" fill="#16412c">
-                <circle cx="95" cy="95" r="9" fill="#16a34a"/><circle cx="95" cy="95" r="16" fill="#16a34a" opacity="0.18"/><text x="108" y="98">Western</text>
-                <circle cx="135" cy="120" r="7" fill="#22c55e"/><text x="146" y="123">Rift Valley</text>
-                <circle cx="110" cy="135" r="6" fill="#4ade80"/><text x="60" y="155">Nyanza</text>
-                <circle cx="175" cy="120" r="6" fill="#65a30d"/><text x="186" y="123">Central</text>
-                <circle cx="205" cy="170" r="6" fill="#0d9488"/><text x="170" y="190">Coast</text>
-              </g>
-            </svg>
-            <span class="absolute top-3 left-3 text-[11px] font-semibold text-forest-700 bg-white/80 px-2 py-1 rounded-md">5 collection hubs · 18 aggregation centres</span>
+          <div class="flex items-center gap-3">
+            <a href="./jocate/" class="hidden rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 md:inline-flex">Open dashboard</a>
+            <a href="#contact" class="inline-flex rounded-full bg-[#9fe53a] px-4 py-2 text-sm font-bold text-[#101010] shadow-[0_12px_26px_rgba(159,229,58,0.28)] transition hover:bg-[#8bd62a]">Request a quote</a>
           </div>
         </div>
-      </section>
+      </header>
 
-      <section id="cases" class="scroll-mt-20">
-        <div class="mb-4">
-          <h2 class="text-[20px] font-bold">Case studies</h2>
-          <p class="text-[13px] text-gray-500">How partners turn Jocate feedstock into commercial products — modelled on real East African ventures.</p>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <article class="card overflow-hidden">
-            <div class="h-32 relative" style="background:linear-gradient(135deg,#16412c,#22c55e)">
-              <span class="absolute bottom-3 left-4 text-white font-bold text-[15px]">Bagasse → Briquettes</span>
-              <span class="absolute top-3 right-3 text-[11px] bg-white/20 text-white px-2 py-1 rounded-md">Energy</span>
-            </div>
-            <div class="p-5">
-              <p class="text-[13px] text-gray-600 leading-relaxed">A clean-cooking manufacturer sources sun-dried bagasse from Jocate's Western hub, carbonises it and presses MOTO-style briquettes that cost 30–50% less than charcoal.</p>
-              <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div class="bg-leaf-50 rounded-lg py-2"><p class="font-bold text-leaf-700 text-[15px]">4,200t</p><p class="text-[10px] text-gray-500">supplied/yr</p></div>
-                <div class="bg-leaf-50 rounded-lg py-2"><p class="font-bold text-leaf-700 text-[15px]">KSh 40</p><p class="text-[10px] text-gray-500">per kg retail</p></div>
-                <div class="bg-leaf-50 rounded-lg py-2"><p class="font-bold text-leaf-700 text-[15px]">30+</p><p class="text-[10px] text-gray-500">jobs created</p></div>
+      <main>
+        <section class="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
+          <div class="brand-triangle rounded-none shadow-[0_18px_40px_rgba(13,17,15,0.06)]">
+            <div class="brand-inner">
+              <div class="max-w-2xl">
+                <span class="eyebrow">Turning agricultural waste into value</span>
+                <div class="brand-wordmark">JOCATE<br />ENTERPRISES<br />LTD</div>
+              </div>
+
+              <div class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 520 220" role="img" aria-label="Jocate Enterprises logo">
+                  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 130C104 12 238 8 430 100" stroke="#0e0e0f" stroke-width="32"/>
+                    <path d="M52 152C160 70 300 70 474 156" stroke="#0e0e0f" stroke-width="24"/>
+                    <path d="M44 116C156 26 280 24 464 104" stroke="#8fe739" stroke-width="28"/>
+                    <path d="M84 150C198 82 312 86 456 166" stroke="#8fe739" stroke-width="18"/>
+                    <path d="M128 176C210 134 324 138 405 182" stroke="#0e0e0f" stroke-width="16"/>
+                  </g>
+                </svg>
               </div>
             </div>
-          </article>
-          <article class="card overflow-hidden">
-            <div class="h-32 relative" style="background:linear-gradient(135deg,#92400e,#f59e0b)">
-              <span class="absolute bottom-3 left-4 text-white font-bold text-[15px]">Rice husk → Build &amp; Feed</span>
-              <span class="absolute top-3 right-3 text-[11px] bg-white/20 text-white px-2 py-1 rounded-md">Construction</span>
-            </div>
-            <div class="p-5">
-              <p class="text-[13px] text-gray-600 leading-relaxed">A cement blender takes silica-rich rice-husk ash to partially replace clinker, cutting CO₂ per tonne, while husk is sold on as poultry bedding.</p>
-              <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div class="bg-amber-50 rounded-lg py-2"><p class="font-bold text-amber-700 text-[15px]">3,500t</p><p class="text-[10px] text-gray-500">supplied/yr</p></div>
-                <div class="bg-amber-50 rounded-lg py-2"><p class="font-bold text-amber-700 text-[15px]">−18%</p><p class="text-[10px] text-gray-500">cement CO₂</p></div>
-                <div class="bg-amber-50 rounded-lg py-2"><p class="font-bold text-amber-700 text-[15px]">2</p><p class="text-[10px] text-gray-500">counties</p></div>
-              </div>
-            </div>
-          </article>
-          <article class="card overflow-hidden">
-            <div class="h-32 relative" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">
-              <span class="absolute bottom-3 left-4 text-white font-bold text-[15px]">Maize cob → Biochar</span>
-              <span class="absolute top-3 right-3 text-[11px] bg-white/20 text-white px-2 py-1 rounded-md">Agriculture</span>
-            </div>
-            <div class="p-5">
-              <p class="text-[13px] text-gray-600 leading-relaxed">A tea estate pyrolyses maize cobs into biochar as a soil amendment, cutting carbon vs. open burning by up to 3× and improving yields.</p>
-              <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div class="bg-teal-50 rounded-lg py-2"><p class="font-bold text-teal-700 text-[15px]">1,900t</p><p class="text-[10px] text-gray-500">supplied/yr</p></div>
-                <div class="bg-teal-50 rounded-lg py-2"><p class="font-bold text-teal-700 text-[15px]">3×</p><p class="text-[10px] text-gray-500">lower GWP</p></div>
-                <div class="bg-teal-50 rounded-lg py-2"><p class="font-bold text-teal-700 text-[15px]">+11%</p><p class="text-[10px] text-gray-500">crop yield</p></div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section id="market" class="scroll-mt-20">
-        <div class="mb-3">
-          <h2 class="text-[20px] font-bold">Market insights</h2>
-          <p class="text-[12px] text-gray-500">Fast-growing circular-economy market with verified data sourcing.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          <div class="card p-4">
-            <p class="text-[24px] font-extrabold text-leaf-700">$28.6B</p>
-            <p class="text-[12px] font-semibold mt-1">Agro-waste market by 2030</p>
-            <p class="text-[11px] text-gray-500 mt-1">7.2% CAGR from $18.9B. Energy, construction, feed manufacturing.</p>
-            <p class="text-[10px] text-leaf-600 mt-1.5 italic">McKinsey &amp; Frost &amp; Sullivan</p>
-          </div>
-          <div class="card p-4">
-            <p class="text-[24px] font-extrabold text-leaf-700">52%</p>
-            <p class="text-[12px] font-semibold mt-1">Global biomass-burning carbon</p>
-            <p class="text-[11px] text-gray-500 mt-1">From Africa. ~1.8 Gt CO₂e annually. Avoidable via valorisation.</p>
-            <p class="text-[10px] text-leaf-600 mt-1.5 italic">FAO, World Bank, UNEP</p>
-          </div>
-          <div class="card p-4">
-            <p class="text-[24px] font-extrabold text-leaf-700">1M+ t</p>
-            <p class="text-[12px] font-semibold mt-1">Charcoal used in Kenya/year</p>
-            <p class="text-[11px] text-gray-500 mt-1">80%+ of off-grid energy. Growing 3–5% CAGR annually.</p>
-            <p class="text-[10px] text-leaf-600 mt-1.5 italic">Kenya Energy Institute</p>
-          </div>
-          <div class="card p-4">
-            <p class="text-[24px] font-extrabold text-leaf-700">$91–350</p>
-            <p class="text-[12px] font-semibold mt-1">Per tonne biochar</p>
-            <p class="text-[11px] text-gray-500 mt-1">Bulk price. Premium $200-1k/t. Carbon credits add $15–30/t.</p>
-            <p class="text-[10px] text-leaf-600 mt-1.5 italic">Biochar Initiative, Verra</p>
-          </div>
-        </div>
-        <div class="card p-6 mt-5">
-          <h3 class="font-bold text-[15px] mb-1">End-use demand by sector</h3>
-          <p class="text-[12px] text-gray-500 mb-4">Where partner demand for Jocate feedstock is concentrated</p>
-          <canvas id="sectorChart" height="90"></canvas>
-        </div>
-      </section>
-
-      <section id="partners" class="scroll-mt-20">
-        <div class="mb-4">
-          <h2 class="text-[20px] font-bold">Partner sectors</h2>
-          <p class="text-[13px] text-gray-500">Industries that buy traceable agro-waste feedstock from Jocate.</p>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">⚡</span><p class="text-[12px] font-semibold">Clean energy</p></div>
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">🏗️</span><p class="text-[12px] font-semibold">Construction</p></div>
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">🐔</span><p class="text-[12px] font-semibold">Animal feed</p></div>
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">🌱</span><p class="text-[12px] font-semibold">Agri-inputs</p></div>
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">📦</span><p class="text-[12px] font-semibold">Packaging</p></div>
-          <div class="card p-5 flex flex-col items-center justify-center text-center gap-2"><span class="text-2xl">🧪</span><p class="text-[12px] font-semibold">Activated carbon</p></div>
-        </div>
-      </section>
-
-      <section class="scroll-mt-20">
-        <div class="mb-3">
-          <h2 class="text-[20px] font-bold">Quality standards &amp; certifications</h2>
-          <p class="text-[12px] text-gray-500">ISO-certified processing, full chain-of-custody, and third-party verification.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="card p-4">
-            <h3 class="font-bold text-[14px] mb-2">Compliance &amp; Standards</h3>
-            <div class="space-y-1.5">
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">ISO 17225 – Solid Biofuels</p>
-                  <p class="text-[11px] text-gray-500">Quality classification &amp; testing</p>
+        <section class="mx-auto max-w-7xl px-5 pb-8 lg:px-8">
+          <div class="rounded-[28px] bg-[#0d2417] p-8 text-white shadow-[0_30px_70px_rgba(8,23,17,0.2)] lg:p-10">
+            <div class="grid items-center gap-10 lg:grid-cols-[1.3fr_0.7fr]">
+              <div>
+                <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#dff9bb]">
+                  <span class="h-2 w-2 rounded-full bg-[#9fe53a]"></span>
+                  Clean feedstock for East Africa
+                </span>
+                <h1 class="mt-5 max-w-xl text-4xl font-black tracking-[-0.07em] text-white md:text-5xl lg:text-6xl">
+                  Sustainable supply, built from agricultural waste.
+                </h1>
+                <p class="mt-5 max-w-xl text-base leading-7 text-slate-200">
+                  We procure, grade and supply traceable agro-waste feedstock to manufacturers, energy producers and industrial buyers seeking reliable, low-carbon raw materials.
+                </p>
+                <div class="mt-7 flex flex-wrap gap-3">
+                  <a href="./jocate/" class="inline-flex rounded-full bg-[#9fe53a] px-5 py-3 text-sm font-bold text-[#101010] transition hover:bg-[#8bd62a]">Explore the dashboard</a>
+                  <a href="#solutions" class="inline-flex rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">Learn more</a>
                 </div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">ISO 14001 – Environmental</p>
-                  <p class="text-[11px] text-gray-500">Certified practices</p>
+
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <div class="text-[11px] uppercase tracking-[0.12em] text-[#d9f2b8]">Diversion rate</div>
+                  <div class="mt-3 text-4xl font-black tracking-[-0.06em] text-white">94%</div>
+                  <div class="mt-2 text-sm text-slate-200">Waste diverted from open burning and disposal.</div>
                 </div>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">ISO 9001 – Quality Mgmt</p>
-                  <p class="text-[11px] text-gray-500">End-to-end QC</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">Chain of Custody</p>
-                  <p class="text-[11px] text-gray-500">Full traceability tracking</p>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <div class="text-[11px] uppercase tracking-[0.12em] text-[#d9f2b8]">On-time delivery</div>
+                  <div class="mt-3 text-4xl font-black tracking-[-0.06em] text-white">98.2%</div>
+                  <div class="mt-2 text-sm text-slate-200">Reliable fulfillment across our collection network.</div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card p-4">
-            <h3 class="font-bold text-[14px] mb-2">Carbon &amp; Impact Verification</h3>
-            <div class="space-y-1.5">
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">Verified Carbon Standard</p>
-                  <p class="text-[11px] text-gray-500">$15–30/t CO₂e credits</p>
-                </div>
+        </section>
+
+        <section id="solutions" class="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-12">
+          <div class="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#2a6b2b]">What we do</p>
+              <h2 class="mt-2 text-3xl font-black tracking-[-0.06em] text-[#101010]">Built for circular industrial supply.</h2>
+            </div>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-3">
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ecf8d5] text-xl">01</div>
+              <h3 class="text-xl font-bold text-[#101010]">Aggregation</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-600">We collect agro-processing residues and farm leftovers from trusted producers across Kenya and East Africa.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ecf8d5] text-xl">02</div>
+              <h3 class="text-xl font-bold text-[#101010]">Grading</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-600">Each feedstock is quality checked, moisture controlled and documented to meet buyer specifications and compliance needs.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ecf8d5] text-xl">03</div>
+              <h3 class="text-xl font-bold text-[#101010]">Supply</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-600">We deliver traceable raw materials to energy, agriculture, construction and manufacturing partners with predictable logistics.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="impact" class="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-12">
+          <div class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] md:p-8">
+            <div class="grid gap-6 md:grid-cols-4">
+              <div>
+                <div class="text-3xl font-black tracking-[-0.06em] text-[#1d4b2d]">18,400 t</div>
+                <div class="mt-2 text-sm text-slate-500">Agro-waste supplied YTD</div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">Gold Standard Cert</p>
-                  <p class="text-[11px] text-gray-500">SDG verification</p>
-                </div>
+              <div>
+                <div class="text-3xl font-black tracking-[-0.06em] text-[#1d4b2d]">2,300</div>
+                <div class="mt-2 text-sm text-slate-500">Farmers &amp; producer partners</div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">Fair Trade &amp; Ethics</p>
-                  <p class="text-[11px] text-gray-500">Ethical sourcing practices</p>
-                </div>
+              <div>
+                <div class="text-3xl font-black tracking-[-0.06em] text-[#1d4b2d]">64</div>
+                <div class="mt-2 text-sm text-slate-500">Industrial and institutional buyers</div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="text-leaf-600 font-bold mt-0.5 text-sm">✓</span>
-                <div>
-                  <p class="text-[12px] font-semibold">Third-Party Audits</p>
-                  <p class="text-[11px] text-gray-500">Annual independent review</p>
+              <div>
+                <div class="text-3xl font-black tracking-[-0.06em] text-[#1d4b2d]">27,600 t</div>
+                <div class="mt-2 text-sm text-slate-500">CO₂e avoided through cleaner handling</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="feedstocks" class="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-12">
+          <div class="mb-6">
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#2a6b2b]">Feedstocks</p>
+            <h2 class="mt-2 text-3xl font-black tracking-[-0.06em] text-[#101010]">Traceable biomass for high-performing industrial use.</h2>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Sugarcane bagasse</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">High-calorific fibre used in briquettes, pellet production and power generation.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Rice husk</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">Silica-rich biomass for energy, ash recovery and industrial processing.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Maize cobs &amp; stover</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">A reliable base for biochar, activated carbon and other value-add applications.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Coffee husk &amp; pulp</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">Organic feedstock used in fertiliser, energy and industrial pellets.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Coconut husk &amp; shell</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">Popular coastal biomass for coir, premium charcoal and thermal applications.</p>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]">
+              <h3 class="text-lg font-bold text-[#101010]">Sawdust &amp; macadamia waste</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">High-energy residues suitable for briquetting and clean industrial fuels.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" class="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:pb-14 lg:pt-10">
+          <div class="rounded-[30px] bg-[#163b2a] p-7 text-white md:p-10">
+            <div class="grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#dff9bb]">Let’s talk</p>
+                <h2 class="mt-2 text-3xl font-black tracking-[-0.06em] text-white md:text-4xl">Source sustainable feedstock at scale.</h2>
+                <p class="mt-4 max-w-lg text-base leading-7 text-slate-200">Tell us your feedstock, target region and monthly volumes, and our team will respond with lead times and pricing within 48 hours.</p>
+              </div>
+
+              <div class="rounded-[24px] bg-white p-5 text-slate-700 shadow-[0_20px_44px_rgba(7,16,12,0.18)]">
+                <div class="grid gap-3">
+                  <input placeholder="Company" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none ring-0 placeholder:text-slate-400" />
+                  <div class="grid grid-cols-2 gap-3">
+                    <input placeholder="Feedstock" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                    <input placeholder="Volume (t/mo)" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                  </div>
+                  <input placeholder="Email" class="rounded-xl border border-slate-200 bg-[#f5f7f4] px-3 py-3 text-sm outline-none placeholder:text-slate-400" />
+                  <button class="mt-1 rounded-xl bg-[#9fe53a] px-4 py-3 text-sm font-bold text-[#101010] transition hover:bg-[#8bd62a]">Request a quote</button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      <section id="contact" class="scroll-mt-20">
-        <div class="rounded-3xl px-9 py-9 flex flex-col lg:flex-row lg:items-center gap-6 justify-between" style="background:linear-gradient(120deg,#16412c,#1c5238)">
-          <div>
-            <h2 class="text-white font-extrabold text-[24px]">Source agro-waste feedstock at scale</h2>
-            <p class="text-leaf-100/80 text-[14px] mt-2 max-w-lg">Tell us your feedstock, volume and delivery region. Our team will respond with grades, lead times and pricing within 48 hours.</p>
-          </div>
-          <div class="card p-5 w-full lg:w-96 bg-white">
-            <div class="grid grid-cols-2 gap-3">
-              <input placeholder="Company" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Feedstock" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Volume (t/mo)" class="bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <input placeholder="Email" class="col-span-2 bg-[#f4f7f3] rounded-lg px-3 py-2.5 text-[13px] outline-none">
-              <button class="col-span-2 bg-leaf-600 hover:bg-leaf-700 text-white font-semibold text-[14px] rounded-lg py-2.5 transition">Request a quote</button>
-            </div>
-          </div>
+      <footer class="border-t border-slate-200 bg-white/60">
+        <div class="mx-auto flex max-w-7xl flex-col justify-between gap-3 px-5 py-6 text-sm text-slate-600 md:flex-row md:items-center lg:px-8">
+          <div>© 2026 Jocate · Agro-Waste Supply. Turning agricultural waste into value.</div>
+          <div>Nairobi, Kenya · hello@jocate.co.ke</div>
         </div>
-      </section>
-
-      <footer class="pt-2 pb-6 flex flex-col md:flex-row items-center justify-between gap-2 text-[12px] text-gray-500">
-        <p>© 2026 Jocate · Agro-Waste Supply. Turning agricultural waste into value.</p>
-        <p>Nairobi, Kenya · hello@jocate.co.ke</p>
       </footer>
-
-    </main>
-  </div>
-</div>
-
-<script>
-  const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
-  const gridc = '#eef2ec';
-
-  new Chart(document.getElementById('volChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-      datasets: [{
-        data: [980,1120,1340,1280,1520,1610,1490,1720,1880,1760,2010,2190],
-        backgroundColor: green, borderRadius: 6, barPercentage: 0.6
-      }]
-    },
-    options: {
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{beginAtZero:true, grid:{color:gridc}, ticks:{callback:v=>v/1000+'k', color:'#7a8a7e', font:{size:11}}},
-        x:{grid:{display:false}, ticks:{color:'#7a8a7e', font:{size:11}}}
-      },
-      maintainAspectRatio:false
-    }
-  });
-
-  new Chart(document.getElementById('mixChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Bagasse','Rice husk','Maize cobs','Coffee husk','Macadamia','Sawdust'],
-      datasets: [{
-        data: [32,22,18,12,9,7],
-        backgroundColor: ['#15803d','#22c55e','#65a30d','#ca8a04','#0d9488','#a3a3a3'],
-        borderWidth: 2, borderColor:'#fff'
-      }]
-    },
-    options: {
-      cutout:'62%',
-      plugins:{legend:{position:'bottom', labels:{boxWidth:10, boxHeight:10, font:{size:11}, padding:10, usePointStyle:true}}},
-      maintainAspectRatio:false
-    }
-  });
-
-  new Chart(document.getElementById('sectorChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Clean energy','Construction','Animal feed','Agri-inputs','Packaging','Activated carbon'],
-      datasets: [{
-        data: [38,21,16,12,8,5],
-        backgroundColor: greenSoft, hoverBackgroundColor: green,
-        borderColor: green, borderWidth:1.5, borderRadius:6
-      }]
-    },
-    options: {
-      indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{beginAtZero:true, grid:{color:gridc}, ticks:{callback:v=>v+'%', color:'#7a8a7e', font:{size:11}}},
-        y:{grid:{display:false}, ticks:{color:'#3b4a40', font:{size:12}}}
-      },
-      maintainAspectRatio:false
-    }
-  });
-</script>
-</body>
+    </div>
+  </body>
 </html>

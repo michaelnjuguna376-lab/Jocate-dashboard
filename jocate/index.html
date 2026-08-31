@@ -20,36 +20,125 @@
     }
   </script>
   <style>
+    :root {
+      --charcoal:#2f3033;
+      --charcoal-ink:#1b1d1f;
+      --charcoal-soft:#4a4d52;
+      --grass:#b7ff4d;
+      --grass-strong:#9fe53a;
+      --grass-ink:#7bcf1d;
+      --surface:#f3f5f1;
+      --panel:#ffffff;
+      --line:#e6ebe3;
+      --text:#101010;
+      --muted:#5f6761;
+    }
     * { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-    body { background:#f4f7f3; }
-    .card { background:#fff; border:1px solid #eaeee8; border-radius:18px; box-shadow:0 1px 2px rgba(16,48,32,.04),0 6px 18px rgba(16,48,32,.04); }
-    .nav-link { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; color:#a7c4b4; font-size:14px; font-weight:500; transition:.15s; }
-    .nav-link:hover { background:#16412c; color:#fff; }
-    .nav-link.active { background:#16a34a; color:#fff; }
+    body { background:var(--surface); color:var(--text); }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:0 1px 2px rgba(16,48,32,.04),0 6px 18px rgba(16,48,32,.04); }
+    .nav-link { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; color:#bfd3c2; font-size:14px; font-weight:500; transition:.2s ease; }
+    .nav-link:hover { background:#24372b; color:#fff; }
+    .nav-link.active { background:linear-gradient(135deg, var(--grass-strong), #8ddf31); color:#111; font-weight:700; }
     ::-webkit-scrollbar { width:9px; height:9px; }
     ::-webkit-scrollbar-thumb { background:#cfe0d4; border-radius:9999px; }
     .scroll-hidden::-webkit-scrollbar { display:none; }
     html { scroll-behavior:smooth; }
+
+    .brand-panel {
+      position:relative;
+      overflow:hidden;
+      border-radius:0;
+      background:#f2f2f2;
+      border:1px solid rgba(19,23,20,.08);
+      box-shadow:0 18px 40px rgba(13,17,15,.06);
+    }
+    .brand-panel::before {
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:60%;
+      background:var(--charcoal);
+      clip-path:polygon(0 0, 100% 0, 72% 100%, 0 100%);
+    }
+    .brand-panel::after {
+      content:"";
+      position:absolute;
+      inset:0 0 0 auto;
+      width:52%;
+      background:linear-gradient(90deg, rgba(116,255,61,.98), rgba(157,245,53,.96));
+      clip-path:polygon(26% 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .brand-contents {
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1.5rem;
+      min-height:210px;
+      padding: 1.85rem 2.25rem 1.5rem 2.25rem;
+    }
+    .brand-copy { max-width:560px; }
+    .brand-copy .eyebrow {
+      display:inline-block;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#dff7b9;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:0.4rem 0.8rem;
+      margin-bottom:1.1rem;
+    }
+    .brand-copy h2 {
+      margin:0;
+      font-weight:900;
+      font-size:clamp(2.7rem, 4vw, 5rem);
+      line-height:.84;
+      letter-spacing:-.08em;
+      color:#0d0d0d;
+      text-transform:uppercase;
+    }
+    .brand-mark {
+      position:relative;
+      width:min(38vw, 440px);
+      min-width:220px;
+      flex-shrink:0;
+      margin-right:0.5rem;
+    }
+    .brand-mark svg {
+      display:block;
+      width:100%;
+      height:auto;
+    }
+    @media (max-width: 1024px) {
+      .brand-panel::before { width:100%; clip-path:polygon(0 0,100% 0,100% 70%,0 100%); }
+      .brand-panel::after { width:100%; top:58%; height:42%; clip-path:polygon(0 0,100% 0,100% 100%,20% 100%); }
+      .brand-contents { flex-direction:column; align-items:flex-start; padding-top:2.15rem; }
+      .brand-mark { width:72%; max-width:420px; margin-left:auto; }
+    }
   </style>
 </head>
 <body class="text-[#0c2417]">
-
+ 
 <div class="flex min-h-screen">
-
+ 
   <!-- ============ SIDEBAR ============ -->
-  <aside class="w-64 shrink-0 bg-forest-900 text-white flex flex-col fixed h-screen z-20">
+  <aside class="w-64 shrink-0 bg-[#1e1f21] text-white flex flex-col fixed h-screen z-20 border-r border-white/5 shadow-[14px_0_35px_rgba(15,15,15,0.12)]">
     <div class="px-5 py-5 flex items-center gap-3 border-b border-white/10">
-      <div class="w-10 h-10 rounded-xl bg-leaf-600 flex items-center justify-center">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M5 21c0-7 5-13 14-14 0 9-6 14-14 14z"/><path d="M5 21c2-5 5-8 9-10" stroke="#0c2417" stroke-width="1.4" fill="none"/></svg>
+      <div class="w-10 h-10 rounded-xl bg-[#9de334] flex items-center justify-center shadow-[0_0_0_2px_rgba(157,227,52,0.22)]">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18.5C8.7 8.3 15.5 4.8 21 4.5V20c-4.6-.7-8.9-2.1-12.8-5.1L3 18.5Z" fill="#111"/><path d="M4.7 15.9c4.8-3.9 9.8-5 15.3-3.7" stroke="#9de334" stroke-width="1.1" stroke-linecap="round"/></svg>
       </div>
       <div>
-        <p class="font-extrabold text-[17px] leading-none">Jocate</p>
-        <p class="text-[11px] text-leaf-200/70 mt-1">Agro-Waste Supply</p>
+        <p class="font-black text-[17px] leading-none tracking-[-.06em]">Jocate</p>
+        <p class="text-[10px] uppercase tracking-[0.2em] text-[#d8f9a8] mt-1.5">Enterprises</p>
       </div>
     </div>
-
+ 
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto scroll-hidden">
-      <p class="px-3 text-[10px] uppercase tracking-wider text-leaf-200/50 font-semibold mb-1">Main</p>
+      <p class="px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1">Main</p>
       <a href="#overview" class="nav-link active">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
         Overview
@@ -70,7 +159,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>
         Market Insights
       </a>
-      <p class="px-3 text-[10px] uppercase tracking-wider text-leaf-200/50 font-semibold mb-1 mt-4">Network</p>
+      <p class="px-3 text-[10px] uppercase tracking-wider text-[#d7f9c0]/60 font-semibold mb-1 mt-4">Network</p>
       <a href="#partners" class="nav-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 20c0-2 2-3.5 4-3.5"/></svg>
         Partners
@@ -80,21 +169,21 @@
         Contact
       </a>
     </nav>
-
-    <div class="m-3 p-4 rounded-2xl bg-forest-700">
+ 
+    <div class="m-3 p-4 rounded-2xl bg-[#2d352f] border border-white/5">
       <p class="text-[13px] font-semibold">Become a partner</p>
-      <p class="text-[11px] text-leaf-200/70 mt-1 leading-snug">Source traceable agro-waste feedstock at scale.</p>
-      <a href="#contact" class="mt-3 block text-center bg-leaf-500 hover:bg-leaf-600 text-white text-[12px] font-semibold rounded-lg py-2 transition">Request supply</a>
+      <p class="text-[11px] text-[#d8f9a8]/70 mt-1 leading-snug">Source traceable agro-waste feedstock at scale.</p>
+      <a href="#contact" class="mt-3 block text-center bg-[#9de334] hover:bg-[#84d11d] text-[#111] text-[12px] font-semibold rounded-lg py-2 transition">Request supply</a>
     </div>
   </aside>
-
+ 
   <!-- ============ MAIN ============ -->
   <div class="flex-1 ml-64">
-
+ 
     <!-- Topbar -->
-    <header class="sticky top-0 z-10 bg-white/85 backdrop-blur border-b border-[#eaeee8] px-8 h-16 flex items-center justify-between">
+    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-[#eaeee8] px-8 h-16 flex items-center justify-between">
       <div>
-        <h1 class="text-[18px] font-bold">Supply Overview</h1>
+        <h1 class="text-[18px] font-black tracking-[-.05em]">Supply Overview</h1>
         <p class="text-[12px] text-gray-500">Operational dashboard · FY 2026</p>
       </div>
       <div class="flex items-center gap-3">
@@ -104,10 +193,10 @@
         </div>
         <button class="relative w-10 h-10 rounded-full bg-[#f1f4ef] flex items-center justify-center">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0c2417" stroke-width="1.8"><path d="M6 9a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg>
-          <span class="absolute top-1.5 right-2 w-2.5 h-2.5 bg-leaf-500 rounded-full border-2 border-white"></span>
+          <span class="absolute top-1.5 right-2 w-2.5 h-2.5 bg-[#9de334] rounded-full border-2 border-white"></span>
         </button>
         <div class="flex items-center gap-2 pl-1">
-          <div class="w-9 h-9 rounded-full bg-leaf-600 text-white font-semibold flex items-center justify-center text-sm">JC</div>
+          <div class="w-9 h-9 rounded-full bg-[#9de334] text-[#111] font-semibold flex items-center justify-center text-sm">JC</div>
           <div class="hidden lg:block leading-tight">
             <p class="text-[13px] font-semibold">Jocate Ops</p>
             <p class="text-[11px] text-gray-500">Admin</p>
@@ -117,6 +206,26 @@
     </header>
 
     <main class="p-8 space-y-10">
+ 
+      <section class="brand-panel" aria-label="Jocate Enterprises brand panel">
+        <div class="brand-contents">
+          <div class="brand-copy">
+            <span class="eyebrow">Turning agricultural waste into value</span>
+            <h2>JOCATE<br>ENTERPRISES<br>LTD</h2>
+          </div>
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 520 220" role="img" aria-label="Jocate Enterprises logo">
+              <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 130C104 12 238 8 430 100" stroke="#0e0e0f" stroke-width="32"/>
+                <path d="M52 152C160 70 300 70 474 156" stroke="#0e0e0f" stroke-width="24"/>
+                <path d="M44 116C156 26 280 24 464 104" stroke="#8fe739" stroke-width="28"/>
+                <path d="M84 150C198 82 312 86 456 166" stroke="#8fe739" stroke-width="18"/>
+                <path d="M128 176C210 134 324 138 405 182" stroke="#0e0e0f" stroke-width="16"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
 
       <!-- ===== HERO ===== -->
       <section id="overview" class="rounded-3xl overflow-hidden relative" style="background:linear-gradient(120deg,#0c2417 0%,#16412c 55%,#1c5238 100%)">
@@ -205,24 +314,6 @@
       </section>
 
       <!-- ===== CHARTS ===== -->
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <div class="card p-4 lg:col-span-2">
-          <div class="flex items-center justify-between mb-3">
-            <div>
-              <h3 class="font-bold text-[15px]">Monthly supply volume</h3>
-              <p class="text-[11px] text-gray-500">Tonnes to partners</p>
-            </div>
-            <span class="text-[11px] font-semibold text-leaf-600 bg-leaf-50 px-2 py-1 rounded-lg">2026 ▾</span>
-          </div>
-          <canvas id="volChart" height="70"></canvas>
-        </div>
-        <div class="card p-4">
-          <h3 class="font-bold text-[15px] mb-1">Feedstock mix</h3>
-          <p class="text-[11px] text-gray-500 mb-2">Volume share %</p>
-          <canvas id="mixChart" height="110"></canvas>
-        </div>
-      </section>
-
       <!-- ===== FEEDSTOCKS ===== -->
       <section id="feedstocks" class="scroll-mt-20">
         <div class="mb-3">
@@ -563,42 +654,6 @@
 <script>
   const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
   const gridc = '#eef2ec';
-
-  new Chart(document.getElementById('volChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-      datasets: [{
-        data: [980,1120,1340,1280,1520,1610,1490,1720,1880,1760,2010,2190],
-        backgroundColor: green, borderRadius: 6, barPercentage: 0.6
-      }]
-    },
-    options: {
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{beginAtZero:true, grid:{color:gridc}, ticks:{callback:v=>v/1000+'k', color:'#7a8a7e', font:{size:11}}},
-        x:{grid:{display:false}, ticks:{color:'#7a8a7e', font:{size:11}}}
-      },
-      maintainAspectRatio:false
-    }
-  });
-
-  new Chart(document.getElementById('mixChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Bagasse','Rice husk','Maize cobs','Coffee husk','Macadamia','Sawdust'],
-      datasets: [{
-        data: [32,22,18,12,9,7],
-        backgroundColor: ['#15803d','#22c55e','#65a30d','#ca8a04','#0d9488','#a3a3a3'],
-        borderWidth: 2, borderColor:'#fff'
-      }]
-    },
-    options: {
-      cutout:'62%',
-      plugins:{legend:{position:'bottom', labels:{boxWidth:10, boxHeight:10, font:{size:11}, padding:10, usePointStyle:true}}},
-      maintainAspectRatio:false
-    }
-  });
 
   new Chart(document.getElementById('sectorChart'), {
     type: 'bar',
