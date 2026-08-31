@@ -44,6 +44,35 @@
     .nav-link:hover { background:#24372b; color:#fff; }
     .nav-link.active { background:linear-gradient(135deg, var(--grass-strong), #8ddf31); color:#111; font-weight:700; }
     .nav-link .label { white-space:nowrap; }
+    .editable-surface {
+      outline: 1px dashed rgba(23, 65, 44, 0.25);
+      outline-offset: 4px;
+      transition: outline-color .2s ease, box-shadow .2s ease;
+    }
+    .is-editing .editable-surface,
+    .is-editing .editable-card,
+    .is-editing [data-editable="true"] {
+      outline: 1px dashed rgba(157, 227, 52, 0.9);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 3px rgba(157, 227, 52, 0.1);
+    }
+    .editable-card {
+      cursor: grab;
+      user-select: none;
+    }
+    .editable-card.dragging {
+      opacity: 0.55;
+      cursor: grabbing;
+    }
+    .is-editing [contenteditable="true"] {
+      background: rgba(255,255,255,0.65);
+      border-radius: 8px;
+      padding: 0.1rem 0.25rem;
+    }
+    .is-editing [contenteditable="true"]:focus {
+      background: rgba(255,255,255,0.92);
+      outline: none;
+    }
     ::-webkit-scrollbar { width:9px; height:9px; }
     ::-webkit-scrollbar-thumb { background:#cfe0d4; border-radius:9999px; }
     .scroll-hidden::-webkit-scrollbar { display:none; }
@@ -215,6 +244,14 @@
         <p class="text-[12px] text-gray-500">Operational dashboard · FY 2026</p>
       </div>
       <div class="flex items-center gap-3">
+        <button id="toggleEditMode" type="button" class="hidden md:inline-flex items-center gap-2 rounded-full border border-[#dfe8dd] bg-white px-3.5 py-2 text-[12px] font-semibold text-[#183525] transition hover:border-[#bfe77f] hover:bg-[#f5fbef]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Edit layout
+        </button>
+        <button id="addTextBox" type="button" class="hidden md:inline-flex items-center gap-2 rounded-full bg-[#9de334] px-3.5 py-2 text-[12px] font-semibold text-[#111] transition hover:bg-[#8bd62d]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Add text box
+        </button>
         <a href="../index.html" class="hidden md:inline-flex items-center gap-2 rounded-full border border-[#dfe8dd] bg-white px-3.5 py-2 text-[12px] font-semibold text-[#183525] transition hover:border-[#bfe77f] hover:bg-[#f5fbef]">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
           Main site
@@ -683,53 +720,144 @@
   </div>
 </div>
 
-<script>
-  const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
-  const gridc = '#eef2ec';
+const green = '#16a34a', greenSoft = 'rgba(22,163,74,.12)';
+const gridc = '#eef2ec';
 
-  const setSidebarCollapsed = (collapsed) => {
-    document.body.classList.toggle('sidebar-collapsed', collapsed);
-    const toggle = document.getElementById('sidebarToggle');
-    if (!toggle) return;
-    toggle.setAttribute('aria-expanded', String(!collapsed));
-    toggle.innerHTML = collapsed
-      ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>'
-      : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
-  };
+const setSidebarCollapsed = (collapsed) => {
+  document.body.classList.toggle('sidebar-collapsed', collapsed);
+  const toggle = document.getElementById('sidebarToggle');
+  if (!toggle) return;
+  toggle.setAttribute('aria-expanded', String(!collapsed));
+  toggle.innerHTML = collapsed
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
+};
 
-  document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-    const collapsed = document.body.classList.contains('sidebar-collapsed');
-    setSidebarCollapsed(!collapsed);
+const setEditMode = (enabled) => {
+  document.body.classList.toggle('is-editing', enabled);
+  document.querySelectorAll('[data-editable="true"]').forEach((el) => {
+    el.setAttribute('contenteditable', enabled ? 'true' : 'false');
+    el.setAttribute('tabindex', enabled ? '0' : '-1');
   });
 
-  document.querySelectorAll('.nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
-      document.querySelectorAll('.nav-link').forEach((navLink) => navLink.classList.remove('active'));
-      link.classList.add('active');
+  document.querySelectorAll('.editable-card').forEach((card) => {
+    card.setAttribute('draggable', String(enabled));
+  });
+
+  const toggle = document.getElementById('toggleEditMode');
+  if (toggle) {
+    toggle.textContent = enabled ? 'Done editing' : 'Edit layout';
+    toggle.innerHTML = enabled
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4L19 2"/></svg> Done editing'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Edit layout';
+  }
+
+  const addBtn = document.getElementById('addTextBox');
+  if (addBtn) {
+    addBtn.style.display = enabled ? 'inline-flex' : 'none';
+  }
+};
+
+const createTextCard = () => {
+  const target = document.querySelector('#feedstocks .grid, #feedstocks > div, #market .card, main');
+  const parent = target || document.querySelector('main');
+  const card = document.createElement('article');
+  card.className = 'editable-card card p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]';
+  card.innerHTML = `
+    <h3 data-editable="true" contenteditable="false" class="text-lg font-bold text-[#101010]">New text box</h3>
+    <p data-editable="true" contenteditable="false" class="mt-2 text-sm leading-6 text-slate-600">Add your custom message here.</p>
+  `;
+  parent.appendChild(card);
+  if (document.body.classList.contains('is-editing')) {
+    card.setAttribute('draggable', 'true');
+    card.querySelectorAll('[data-editable="true"]').forEach((el) => {
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('tabindex', '0');
+    });
+  }
+  return card;
+};
+
+document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+  const collapsed = document.body.classList.contains('sidebar-collapsed');
+  setSidebarCollapsed(!collapsed);
+});
+
+document.getElementById('toggleEditMode')?.addEventListener('click', () => {
+  const enabled = !document.body.classList.contains('is-editing');
+  setEditMode(enabled);
+});
+
+document.getElementById('addTextBox')?.addEventListener('click', () => {
+  createTextCard();
+});
+
+document.querySelectorAll('.nav-link').forEach((link) => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.nav-link').forEach((navLink) => navLink.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+const makeCardsDraggable = () => {
+  const cards = document.querySelectorAll('.editable-card');
+  cards.forEach((card) => {
+    card.setAttribute('draggable', 'true');
+    card.addEventListener('dragstart', () => {
+      card.classList.add('dragging');
+      card.setAttribute('data-dragging', 'true');
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      card.removeAttribute('data-dragging');
+    });
+    card.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+    card.addEventListener('drop', (event) => {
+      event.preventDefault();
+      const dragging = document.querySelector('.editable-card[data-dragging="true"]');
+      const parent = card.parentElement;
+      if (!dragging || !parent || dragging === card) return;
+      const after = card.nextElementSibling;
+      parent.insertBefore(dragging, after);
     });
   });
+};
 
-  const buildMailto = () => {
-    const company = document.getElementById('quoteCompany')?.value?.trim() || 'Not provided';
-    const feedstock = document.getElementById('quoteFeedstock')?.value?.trim() || 'Not provided';
-    const volume = document.getElementById('quoteVolume')?.value?.trim() || 'Not provided';
-    const email = document.getElementById('quoteEmail')?.value?.trim() || 'Not provided';
+document.querySelectorAll('.card, .stat-box, .metric-card, .case-card, .partner-card, .region-card, .feed-card').forEach((el) => {
+  el.classList.add('editable-card');
+  el.setAttribute('data-editable', 'true');
+});
+document.querySelectorAll('h1, h2, h3, h4, p, li').forEach((el) => {
+  if (el.closest('.card, .stat-box, .metric-card, .case-card, .partner-card, .region-card, .feed-card, section')) {
+    el.setAttribute('data-editable', 'true');
+  }
+});
+setEditMode(false);
+makeCardsDraggable();
 
-    const subject = encodeURIComponent(`Quote Request - ${company}`);
-    const body = encodeURIComponent(
-      `Company: ${company}\n` +
-      `Feedstock: ${feedstock}\n` +
-      `Volume: ${volume}\n` +
-      `Email: ${email}\n\n` +
-      `Please share pricing, lead times, and delivery options for this requirement.`
-    );
+const buildMailto = () => {
+  const company = document.getElementById('quoteCompany')?.value?.trim() || 'Not provided';
+  const feedstock = document.getElementById('quoteFeedstock')?.value?.trim() || 'Not provided';
+  const volume = document.getElementById('quoteVolume')?.value?.trim() || 'Not provided';
+  const email = document.getElementById('quoteEmail')?.value?.trim() || 'Not provided';
 
-    window.location.href = `mailto:jocateent@gmail.com?subject=${subject}&body=${body}`;
-  };
+  const subject = encodeURIComponent(`Quote Request - ${company}`);
+  const body = encodeURIComponent(
+    `Company: ${company}\n` +
+    `Feedstock: ${feedstock}\n` +
+    `Volume: ${volume}\n` +
+    `Email: ${email}\n\n` +
+    `Please share pricing, lead times, and delivery options for this requirement.`
+  );
 
-  document.getElementById('quoteButton')?.addEventListener('click', buildMailto);
+  window.location.href = `mailto:jocateent@gmail.com?subject=${subject}&body=${body}`;
+};
 
-  new Chart(document.getElementById('sectorChart'), {
+document.getElementById('quoteButton')?.addEventListener('click', buildMailto);
+
+new Chart(document.getElementById('sectorChart'), {
     type: 'bar',
     data: {
       labels: ['Clean energy','Construction','Animal feed','Agri-inputs','Packaging','Activated carbon'],

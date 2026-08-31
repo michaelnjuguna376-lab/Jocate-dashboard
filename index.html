@@ -118,6 +118,25 @@
         transform: translateY(-1px);
       }
 
+      .editable-card {
+        cursor: grab;
+        user-select: none;
+      }
+      .editable-card.dragging {
+        opacity: 0.6;
+        cursor: grabbing;
+      }
+      .is-editing [data-editable="true"] {
+        outline: 1px dashed rgba(159, 229, 58, 0.9);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 3px rgba(159, 229, 58, 0.1);
+      }
+      .is-editing [contenteditable="true"] {
+        background: rgba(255,255,255,0.7);
+        border-radius: 8px;
+        padding: 0.15rem 0.35rem;
+      }
+
       @media (max-width: 768px) {
         .brand-triangle::before {
           width: 100%;
@@ -166,6 +185,8 @@
           </nav>
 
           <div class="flex items-center gap-3">
+            <button id="toggleLandingEdit" type="button" class="hidden rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 md:inline-flex">Edit layout</button>
+            <button id="addLandingTextBox" type="button" class="hidden rounded-full bg-[#9fe53a] px-4 py-2 text-sm font-bold text-[#101010] shadow-[0_12px_26px_rgba(159,229,58,0.28)] transition hover:bg-[#8bd62a] md:inline-flex">Add text box</button>
             <a href="./jocate/" class="hidden rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 md:inline-flex">Open dashboard</a>
             <a href="#contact" class="inline-flex rounded-full bg-[#9fe53a] px-4 py-2 text-sm font-bold text-[#101010] shadow-[0_12px_26px_rgba(159,229,58,0.28)] transition hover:bg-[#8bd62a]">Request a quote</a>
           </div>
@@ -349,6 +370,75 @@
       </footer>
     </div>
     <script>
+      const setLandingEditMode = (enabled) => {
+        document.body.classList.toggle('is-editing', enabled);
+        document.querySelectorAll('[data-editable="true"]').forEach((el) => {
+          el.setAttribute('contenteditable', enabled ? 'true' : 'false');
+          el.setAttribute('tabindex', enabled ? '0' : '-1');
+        });
+        document.querySelectorAll('.editable-card').forEach((card) => {
+          card.setAttribute('draggable', String(enabled));
+        });
+
+        const toggle = document.getElementById('toggleLandingEdit');
+        if (toggle) toggle.textContent = enabled ? 'Done editing' : 'Edit layout';
+
+        const addBtn = document.getElementById('addLandingTextBox');
+        if (addBtn) addBtn.style.display = enabled ? 'inline-flex' : 'none';
+      };
+
+      const createLandingTextBox = () => {
+        const parent = document.querySelector('#feedstocks .grid') || document.querySelector('main');
+        const card = document.createElement('div');
+        card.className = 'editable-card rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_rgba(16,24,40,0.03)]';
+        card.innerHTML = `
+          <h3 data-editable="true" contenteditable="false" class="text-lg font-bold text-[#101010]">New text box</h3>
+          <p data-editable="true" contenteditable="false" class="mt-2 text-sm leading-6 text-slate-600">Add your custom message here.</p>
+        `;
+        parent.appendChild(card);
+        if (document.body.classList.contains('is-editing')) {
+          card.setAttribute('draggable', 'true');
+          card.querySelectorAll('[data-editable="true"]').forEach((el) => {
+            el.setAttribute('contenteditable', 'true');
+            el.setAttribute('tabindex', '0');
+          });
+        }
+      };
+
+      document.getElementById('toggleLandingEdit')?.addEventListener('click', () => {
+        const enabled = !document.body.classList.contains('is-editing');
+        setLandingEditMode(enabled);
+      });
+      document.getElementById('addLandingTextBox')?.addEventListener('click', createLandingTextBox);
+
+      document.querySelectorAll('.rounded-3xl, .rounded-[24px], .rounded-[28px]').forEach((el) => {
+        if (el.closest('main') || el.closest('section')) {
+          el.classList.add('editable-card');
+          el.setAttribute('data-editable', 'true');
+        }
+      });
+      document.querySelectorAll('h1, h2, h3, p, li').forEach((el) => {
+        if (el.closest('main, section')) {
+          el.setAttribute('data-editable', 'true');
+        }
+      });
+
+      document.querySelectorAll('.editable-card').forEach((card) => {
+        card.setAttribute('draggable', 'true');
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        card.addEventListener('dragover', (event) => event.preventDefault());
+        card.addEventListener('drop', (event) => {
+          event.preventDefault();
+          const dragged = document.querySelector('.editable-card.dragging');
+          if (!dragged || dragged === card) return;
+          const parent = card.parentElement;
+          parent.insertBefore(dragged, card.nextElementSibling);
+        });
+      });
+
+      setLandingEditMode(false);
+
       const sendQuoteEmail = (companyId, feedstockId, volumeId, emailId) => {
         const company = document.getElementById(companyId)?.value?.trim() || 'Not provided';
         const feedstock = document.getElementById(feedstockId)?.value?.trim() || 'Not provided';
